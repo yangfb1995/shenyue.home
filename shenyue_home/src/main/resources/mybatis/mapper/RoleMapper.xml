@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.apache.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.shenyue.home.mapper.RoleMapper">
+   <resultMap id="getRoleUser" type="com.shenyue.home.pojo.Role">
+        <id column="rid" property="rid" jdbcType="BIGINT"/>
+        <result column="rolename" property="roleName" jdbcType="VARCHAR"/>
+        <collection property="userList" ofType="com.shenyue.home.pojo.User">
+            <id column="uid" property="uid" jdbcType="BIGINT"/>
+            <result column="username" property="userName" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="roleUser" parameterType="Integer" resultMap="getRoleUser">
+        select r.*,u.* from sys_role r join user_role ur on r.rid=ur.rid
+            join sys_user u on u.uid=ur.uid
+                where r.rid=#{rid}
+    </select>
+
+    <select id="getRoleById" resultType="Role">
+        select * from sys_role where rid=#{id}
+    </select>
+
+    <insert id="insert" parameterType="Role">
+        insert into sys_role(rid,rolename) values(#{id},#{roleName})
+    </insert>
+
+    <update id="update" parameterType="Role">
+        update sys_role set rolename=#{roleName} where rid=#{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from sys_role where rid=#{id}
+    </delete>
+
+</mapper>
